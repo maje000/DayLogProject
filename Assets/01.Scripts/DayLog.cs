@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class DayLog : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    int _year;
+    int _month;
+    int _day;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    string _contents;
 }
