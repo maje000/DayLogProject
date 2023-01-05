@@ -3,33 +3,84 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainPageUIDisplayer : MonoBehaviour
 {
-    private TMPro.TextMeshProUGUI _displayText_CurrentTime;
-    private Transform _logListHolder;
+    MainPageUIController _uiController;
 
-    // From Model
+    private TextMeshProUGUI Text_Today;
+    private TextMeshProUGUI Text_CurrentTIme;
+    private Transform LogListHolder;
+    private TMP_InputField InputField_AddLog;
+    private Button Button_Reset;
+
     private string[] _logList;
     public GameObject logPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+    #region API
+    public void Init()
     {
-        _displayText_CurrentTime = transform.Find("Text_Today").GetComponent<TMPro.TextMeshProUGUI>();
+        _uiController = GetComponent<MainPageUIController>();
+
+        Text_Today = transform.Find("Text_Today").GetComponent<TextMeshProUGUI>();
         UpdateTodayDisplayer();
+        Text_CurrentTIme = transform.Find("Text_CurrentTime").GetComponent<TextMeshProUGUI>();
 
-        _displayText_CurrentTime = transform.Find("Text_CurrentTime").GetComponent<TMPro.TextMeshProUGUI>();
+        LogListHolder = transform.Find("Panel_LogDisplayer/LogListHolder");
+        InputField_AddLog = transform.Find("InputField_AddLog").GetComponent<TMP_InputField>();
+        InputField_AddLog.onSubmit.AddListener(OnSubmit_AddLog);
 
-        _logListHolder = transform.Find("Panel_LogDisplayer/LogListHolder");
+        Button_Reset = transform.Find("Button_Reset").GetComponent<Button>();
+        Button_Reset.onClick.AddListener(OnClick_Reset);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateLogList()
+    {
+        // Pooling Object
+        ClearLog();
+
+        for (int i = 0; i < _logList.Length; i++)
+        {
+            CreateLog(_logList[i]);
+        }
+        // end PoolingObject
+    }
+
+    public void SetLog(string[] logList)
+    {
+        _logList = logList;
+    }
+    #endregion
+
+    #region OnUIEvent
+    public void OnSubmit_AddLog(string contents)
+    {
+        // reutrn Empty contents
+        if (string.IsNullOrEmpty(contents))
+        {
+            return;
+        }
+
+        _uiController.AddLog(contents);
+        InputField_AddLog.text = "";
+        InputField_AddLog.onDeselect.Invoke("");
+    }
+
+    public void OnClick_Reset()
+    {
+        _uiController.RemoveData();
+    }
+    #endregion
+
+    #region Unity lifecycle
+    private void Update()
     {
         UpdateTimeDisplayer();
     }
+    #endregion
 
+    #region Private Method
     private void UpdateTodayDisplayer()
     {
         DateTime currentDate = DateTime.Now;
@@ -37,14 +88,13 @@ public class MainPageUIDisplayer : MonoBehaviour
         string displayDate = string.Format("{0:0000}.{1:00}.{2:00}\n({3})",
             currentDate.Year, currentDate.Month, currentDate.Day, currentDate.DayOfWeek);
 
-        _displayText_CurrentTime.text = displayDate;
+        Text_Today.text = displayDate;
     }
 
-
-    private int second = -1;
+    private int _secondCount = -1;
     private void UpdateTimeDisplayer()
     {
-        if (second != DateTime.Now.Second)
+        if (_secondCount != DateTime.Now.Second)
         {
             Debug.Log("Tic");
             DateTime CurrentTIme = DateTime.Now;
@@ -52,41 +102,29 @@ public class MainPageUIDisplayer : MonoBehaviour
             string diplayTime = string.Format("{0:00}:{1:00}.{2:00}", 
                 CurrentTIme.Hour, CurrentTIme.Minute, CurrentTIme.Second);
 
-            _displayText_CurrentTime.text = diplayTime;
+            Text_CurrentTIme.text = diplayTime;
 
-            second = CurrentTIme.Second;
+            _secondCount = CurrentTIme.Second;
         }
     }
 
-    private void UpdateLogList()
+    private void CreateLog(string contents)
     {
-        // Pooling Object
-        ClearLogList();
-
-        for (int i = 0; i < _logList.Length; i++)
-        {
-            Instantiate(logPrefab, _logListHolder);
-        }
-        // end PoolingObject
+        GameObject log = Instantiate(logPrefab, LogListHolder);
+        log.GetComponent<TextMeshProUGUI>().text = contents;
     }
 
-    private void ClearLogList()
+    private void ClearLog()
     {
-        int logCount = _logListHolder.childCount;
+        int logCount = LogListHolder.childCount;
 
         if (logCount != 0)
         {
             for (int i = 0; i < logCount; i++)
             {
-                Destroy(_logListHolder.GetChild(i));
+                Destroy(LogListHolder.GetChild(i).gameObject);
             }
         }
     }
-
-    public void SetLogList(string[] logList)
-    {
-        _logList = logList;
-
-        UpdateLogList();
-    }
+    #endregion
 }
