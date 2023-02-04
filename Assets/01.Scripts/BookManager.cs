@@ -49,15 +49,16 @@ public class BookManager : MonoBehaviour
         }
     }
 
+
+    #region InputManager
+    float _horizontalSlideValue = 0;
     private void Update()
     {
         MobileTouchEvent();
 
+        /*여기는 Book Manager에서 실행... */
         pages[currentPage].transform.position = _centerPagePos + Vector3.right * _horizontalSlideValue;
     }
-
-    #region InputManager
-    float _horizontalSlideValue = 0;
 
     private void MobileTouchEvent()
     {

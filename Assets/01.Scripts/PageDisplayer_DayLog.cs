@@ -17,36 +17,47 @@ public class PageDisplayer_DayLog : MonoBehaviour
     private string[] _logList;
     public GameObject logPrefab;
 
+
+    /** API란
+     * API는 정의 및 프로토콜 집합을 사용하여 두 소프트웨어 구성 요소가 서로 통신할 수 있게 하는 메커니즘이다.
+     * */
     #region API
     public void Init()
     {
+        /*핸들을 가져옴..*/
         _uiController = GetComponent<PageController_DayLog>();
 
+        // 출력 Text 핸들
         Text_Today = transform.Find("Text_Today").GetComponent<TextMeshProUGUI>();
-        UpdateTodayDisplayer();
         Text_CurrentTIme = transform.Find("Text_CurrentTime").GetComponent<TextMeshProUGUI>();
 
         LogListHolder = transform.Find("Panel_LogDisplayer/LogListHolder");
+
+        // 인풋필드 핸들 및 이벤트 추가
         InputField_AddLog = transform.Find("InputField_AddLog").GetComponent<TMP_InputField>();
         InputField_AddLog.onSubmit.AddListener(OnSubmit_AddLog);
 
+        // 버튼 핸들
         Button_Reset = transform.Find("Button_Reset").GetComponent<Button>();
-        Button_Reset.onClick.AddListener(OnClick_Reset);
-
         Button_Exit = transform.Find("Button_Exit").GetComponent<Button>();
+
+        // 버튼 이벤트 추가
+        Button_Reset.onClick.AddListener(OnClick_Reset); 
         Button_Exit.onClick.AddListener(OnClick_Exit);
+
+
+        /*초기 화면 출력..*/
+        UpdateTodayDisplayer();
     }
 
     public void UpdateLogList()
     {
-        // Pooling Object
         ClearLog();
 
         for (int i = 0; i < _logList.Length; i++)
         {
             CreateLog(_logList[i]);
         }
-        // end PoolingObject
     }
 
     public void SetLog(string[] logList)
@@ -58,7 +69,6 @@ public class PageDisplayer_DayLog : MonoBehaviour
     #region OnUIEvent
     public void OnSubmit_AddLog(string contents)
     {
-        // reutrn Empty contents
         if (string.IsNullOrEmpty(contents))
         {
             return;
