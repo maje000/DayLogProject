@@ -1,184 +1,34 @@
 {
     "schedules": [
         {
+            "id": 0,
             "year": 2023,
             "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2443,
+            "day": 18,
+            "dayOfWeek": 6,
+            "startTime": 40037,
             "endTime": 0,
-            "contents": "Test"
+            "contents": "asdasd"
         },
         {
+            "id": 0,
             "year": 2023,
             "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2443,
+            "day": 18,
+            "dayOfWeek": 6,
+            "startTime": 40039,
             "endTime": 0,
-            "contents": "Test1"
+            "contents": "asdfasfasfas"
         },
         {
+            "id": 0,
             "year": 2023,
             "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2443,
+            "day": 18,
+            "dayOfWeek": 6,
+            "startTime": 40041,
             "endTime": 0,
-            "contents": "Test2"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2443,
-            "endTime": 0,
-            "contents": "Test3"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2443,
-            "endTime": 0,
-            "contents": "Test4"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2475,
-            "endTime": 0,
-            "contents": "Test"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2475,
-            "endTime": 0,
-            "contents": "Test1"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2475,
-            "endTime": 0,
-            "contents": "Test2"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2475,
-            "endTime": 0,
-            "contents": "Test3"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2475,
-            "endTime": 0,
-            "contents": "Test4"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2558,
-            "endTime": 0,
-            "contents": "Test"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2558,
-            "endTime": 0,
-            "contents": "Test1"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2558,
-            "endTime": 0,
-            "contents": "Test2"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2558,
-            "endTime": 0,
-            "contents": "Test3"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2558,
-            "endTime": 0,
-            "contents": "Test4"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2922,
-            "endTime": 0,
-            "contents": "Test"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2922,
-            "endTime": 0,
-            "contents": "Test1"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2922,
-            "endTime": 0,
-            "contents": "Test2"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2922,
-            "endTime": 0,
-            "contents": "Test3"
-        },
-        {
-            "year": 2023,
-            "month": 2,
-            "day": 1,
-            "dayOfWeek": 3,
-            "startTime": 2922,
-            "endTime": 0,
-            "contents": "Test4"
+            "contents": "faf aa fab"
         }
     ]
 }

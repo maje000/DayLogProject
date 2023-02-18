@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BookManager : MonoBehaviour
 {
-    TMPro.TextMeshProUGUI Text_HorizontalSlideValue;
+    //TMPro.TextMeshProUGUI Text_HorizontalSlideValue;
     public Transform[] pages;
     public int currentPage;
     public Vector3 _centerPagePos;
     public Vector3 _leftPagePos;
     public Vector3 _rightPagePos;
+    public Button _button_NextPage;
+    public Button _button_PrePage;
 
     private int TotalPageCount
     {
@@ -26,7 +29,7 @@ public class BookManager : MonoBehaviour
 
     private void Start()
     {
-        Text_HorizontalSlideValue = transform.Find("Text_HorizontalSlideValue").GetComponent<TMPro.TextMeshProUGUI>();
+        //Text_HorizontalSlideValue = transform.Find("Text_HorizontalSlideValue").GetComponent<TMPro.TextMeshProUGUI>();
 
         /** 페이지 위치 지정
          * 현재 페이지 위치 > _centerPagePos
@@ -34,7 +37,8 @@ public class BookManager : MonoBehaviour
          * 다음 페이지들 위치 > _rightPagePos 다음 페이지들은 모두 이 위치에
          * **/
         //_centerPagePos = pages[0].position;
-        _centerPagePos = new Vector3(Screen.currentResolution.width / 2, Screen.currentResolution.height / 2, 0);
+
+        _centerPagePos = new Vector3(Screen.width / 2, Screen.height / 2, 0);
         
         float pageCenterPosX = _centerPagePos.x;
         _leftPagePos = _centerPagePos - Vector3.right * (pageCenterPosX) * 2;
@@ -47,6 +51,11 @@ public class BookManager : MonoBehaviour
         {
             pages[i].position = _rightPagePos;
         }
+
+        Button button_NextPage = transform.Find("Button_NextPage").GetComponent<Button>();
+        button_NextPage.onClick.AddListener(NextPage);
+        Button button_PrePage = transform.Find("Button_PrePage").GetComponent<Button>();
+        button_PrePage.onClick.AddListener(PrePage);
     }
 
 
@@ -57,7 +66,7 @@ public class BookManager : MonoBehaviour
         MobileTouchEvent();
 
         /*여기는 Book Manager에서 실행... */
-        pages[currentPage].transform.position = _centerPagePos + Vector3.right * _horizontalSlideValue;
+        pages[currentPage].position =  Vector3.Lerp(pages[currentPage].position, _centerPagePos + Vector3.right * _horizontalSlideValue, 0.4f);
     }
 
     private void MobileTouchEvent()
@@ -83,7 +92,7 @@ public class BookManager : MonoBehaviour
 
         _horizontalSlideValue = Mathf.Lerp(_horizontalSlideValue, 0, 0.2f);
 
-        Text_HorizontalSlideValue.text =string.Format($"{_horizontalSlideValue:0.0}") ;
+        //Text_HorizontalSlideValue.text =string.Format($"{_horizontalSlideValue:0.0}") ;
     }
 
     private void NextPage()
@@ -94,8 +103,7 @@ public class BookManager : MonoBehaviour
             return;
         }
 
-        Transform currentPageT = pages[currentPage];
-        currentPageT.position = _leftPagePos;
+        pages[currentPage].position = _leftPagePos;
         currentPage++;
     }
 
@@ -106,9 +114,8 @@ public class BookManager : MonoBehaviour
             // 첫 페이지. 이전 페이지는 없다.
             return;
         }
+        pages[currentPage].position = _rightPagePos;
 
-        Transform currentPageT = pages[currentPage];
-        currentPageT.position = _rightPagePos;
         currentPage--;
     }
     #endregion

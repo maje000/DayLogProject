@@ -5,17 +5,19 @@ using UnityEngine.UI;
 
 public class PageDisplayer_DayLog : MonoBehaviour
 {
-    PageController_DayLog _uiController;
+    PageController_DayLog _pageController;
 
-    private TextMeshProUGUI Text_Today;
-    private TextMeshProUGUI Text_CurrentTIme;
-    private Transform LogListHolder;
-    private TMP_InputField InputField_AddLog;
+    // Resource
+    public GameObject prefab_Schedule;
+
+    // UI
+    private TextMeshProUGUI Displayer_Today;
+    private TextMeshProUGUI Displayer_Time;
+    private Transform SchduleListHolder;
+    private TMP_InputField InputField_AddSchedule;
     private Button Button_Reset;
     private Button Button_Exit;
 
-    private string[] _logList;
-    public GameObject logPrefab;
 
 
     /** API란
@@ -25,68 +27,95 @@ public class PageDisplayer_DayLog : MonoBehaviour
     public void Init()
     {
         /*핸들을 가져옴..*/
-        _uiController = GetComponent<PageController_DayLog>();
+        _pageController = GetComponent<PageController_DayLog>();
 
         // 출력 Text 핸들
-        Text_Today = transform.Find("Text_Today").GetComponent<TextMeshProUGUI>();
-        Text_CurrentTIme = transform.Find("Text_CurrentTime").GetComponent<TextMeshProUGUI>();
+        Displayer_Today = transform.Find("Displayer_Today").GetComponent<TextMeshProUGUI>();
+        Displayer_Time = transform.Find("Displayer_Time").GetComponent<TextMeshProUGUI>();
 
-        LogListHolder = transform.Find("Panel_LogDisplayer/LogListHolder");
+        SchduleListHolder = transform.Find("Displayer_Schedule/ScheduleListHolder");
 
         // 인풋필드 핸들 및 이벤트 추가
-        InputField_AddLog = transform.Find("InputField_AddLog").GetComponent<TMP_InputField>();
-        InputField_AddLog.onSubmit.AddListener(OnSubmit_AddLog);
+        InputField_AddSchedule = transform.Find("InputField_AddSchedule").GetComponent<TMP_InputField>();
+        InputField_AddSchedule.onSubmit.AddListener(OnSubmit_AddSchedule);
 
         // 버튼 핸들
         Button_Reset = transform.Find("Button_Reset").GetComponent<Button>();
         Button_Exit = transform.Find("Button_Exit").GetComponent<Button>();
 
         // 버튼 이벤트 추가
-        Button_Reset.onClick.AddListener(OnClick_Reset); 
+        Button_Reset.onClick.AddListener(OnClick_Reset);
         Button_Exit.onClick.AddListener(OnClick_Exit);
 
 
         /*초기 화면 출력..*/
         UpdateTodayDisplayer();
+        _pageController.UpdateScheduiles();
     }
 
-    public void UpdateLogList()
+    public void CreateSchedule(string content)
     {
-        ClearLog();
+        GameObject schedule = Instantiate(prefab_Schedule, SchduleListHolder);
 
-        for (int i = 0; i < _logList.Length; i++)
+        ///Button button = schedule.GetComponent<Button>();
+        //button.onClick.AddListener(OpenPopup_ScheduleData());
+        schedule.GetComponent<TextMeshProUGUI>().text = content;
+    }
+
+    public void ClearScheduleDisplayer()
+    {
+        int scheduleCount = SchduleListHolder.childCount;
+
+        if (scheduleCount != 0)
         {
-            CreateLog(_logList[i]);
+            for (int i = 0; i < scheduleCount; i++)
+            {
+                Destroy(SchduleListHolder.GetChild(i).gameObject);
+            }
         }
-    }
-
-    public void SetLog(string[] logList)
-    {
-        _logList = logList;
     }
     #endregion
 
     #region OnUIEvent
-    public void OnSubmit_AddLog(string contents)
+    /// <summary>
+    /// InputField에 입력된 내용이 Submit 되었을 때 반응
+    /// </summary>
+    /// <param name="contents"></param>
+    public void OnSubmit_AddSchedule(string contents)
     {
+        // 문자열 널 체크
         if (string.IsNullOrEmpty(contents))
         {
             return;
         }
 
-        _uiController.AddSchedule(contents);
-        InputField_AddLog.text = "";
-        InputField_AddLog.onDeselect.Invoke("");
+        // 컨트롤러에게 이벤트가 발생됨을 전달
+        _pageController.OnAddSchedule(contents);
+
+        // 우리는 초기화
+        InputField_AddSchedule.text = "";
+        InputField_AddSchedule.onDeselect.Invoke("");
     }
 
     public void OnClick_Reset()
     {
+        // 스케쥴 초기화?
+        /*
+         * _pageController에서 데이터를 일단 모두 지워주자
+         * 그리고 출력된 부분들을 초기화
+         */
 
+        _pageController.RemoveSchedules();
     }
 
     public void OnClick_Exit()
     {
+        // 게임 종료...
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
     #endregion
 
@@ -105,7 +134,7 @@ public class PageDisplayer_DayLog : MonoBehaviour
         string displayDate = string.Format("{0:0000}.{1:00}.{2:00}\n({3})",
             currentDate.Year, currentDate.Month, currentDate.Day, currentDate.DayOfWeek);
 
-        Text_Today.text = displayDate;
+        Displayer_Today.text = displayDate;
     }
 
     private int _secondCount = -1;
@@ -113,35 +142,21 @@ public class PageDisplayer_DayLog : MonoBehaviour
     {
         if (_secondCount != DateTime.Now.Second)
         {
-            Debug.Log("Tic");
+            //Debug.Log("Tic");
             DateTime CurrentTIme = DateTime.Now;
 
-            string diplayTime = string.Format("{0:00}:{1:00}.{2:00}", 
+            string diplayTime = string.Format("{0:00}:{1:00}.{2:00}",
                 CurrentTIme.Hour, CurrentTIme.Minute, CurrentTIme.Second);
 
-            Text_CurrentTIme.text = diplayTime;
+            Displayer_Time.text = diplayTime;
 
             _secondCount = CurrentTIme.Second;
         }
     }
 
-    private void CreateLog(string contents)
+    private void OpenPopup_ScheduleData(int id)
     {
-        GameObject log = Instantiate(logPrefab, LogListHolder);
-        log.GetComponent<TextMeshProUGUI>().text = contents;
-    }
 
-    private void ClearLog()
-    {
-        int logCount = LogListHolder.childCount;
-
-        if (logCount != 0)
-        {
-            for (int i = 0; i < logCount; i++)
-            {
-                Destroy(LogListHolder.GetChild(i).gameObject);
-            }
-        }
     }
     #endregion
 }

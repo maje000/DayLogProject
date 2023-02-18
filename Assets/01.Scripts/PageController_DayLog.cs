@@ -11,10 +11,15 @@ public class PageController_DayLog : MonoBehaviour
 
     private void OnEnable()
     {
-        _uiDisplayer = GetComponent<PageDisplayer_DayLog>();
-        _uiDisplayer.Init();
+        if (_scheduleList == null)
+        {
+            _scheduleList = new List<DataManager.Schedule>();
+        }
 
         LoadSchedules();
+
+        _uiDisplayer = GetComponent<PageDisplayer_DayLog>();
+        _uiDisplayer.Init();
     }
 
     private void OnDisable()
@@ -22,24 +27,35 @@ public class PageController_DayLog : MonoBehaviour
         SaveSchedules();
     }
 
-    public void AddSchedule(string contents)
+    public void OnAddSchedule(string contents)
     {
         _scheduleList.AddSchedule(contents);
+        _uiDisplayer.CreateSchedule(contents);
 
-        List<string> schedules = new List<string>();
-
-        foreach(DataManager.Schedule schedule in _scheduleList)
-        {
-            schedules.Add(schedule.contents);
-        }
-
-        _uiDisplayer.SetLog(schedules.ToArray());
-        _uiDisplayer.UpdateLogList();
+        SaveSchedules();
     }
+
     public void RemoveSchedules()
     {
         _scheduleList.Clear();
-        _uiDisplayer.UpdateLogList();
+        _uiDisplayer.ClearScheduleDisplayer();
+
+        SaveSchedules();
+    }
+
+    public void UpdateScheduiles()
+    {
+        int scheduleCount = _scheduleList.Count;
+
+        if (scheduleCount > 0)
+        {
+            _uiDisplayer.ClearScheduleDisplayer();
+
+            for (int i = 0; i < scheduleCount; i++)
+            {
+                _uiDisplayer.CreateSchedule(_scheduleList[i].contents);
+            }
+        }
     }
 
     [ContextMenu("SaveSchedules")]
