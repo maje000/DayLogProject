@@ -6,9 +6,9 @@
             "month": 2,
             "day": 18,
             "dayOfWeek": 6,
-            "startTime": 40037,
+            "startTime": 85642,
             "endTime": 0,
-            "contents": "asdasd"
+            "contents": "헤"
         },
         {
             "id": 0,
@@ -16,19 +16,9 @@
             "month": 2,
             "day": 18,
             "dayOfWeek": 6,
-            "startTime": 40039,
+            "startTime": 85648,
             "endTime": 0,
-            "contents": "asdfasfasfas"
-        },
-        {
-            "id": 0,
-            "year": 2023,
-            "month": 2,
-            "day": 18,
-            "dayOfWeek": 6,
-            "startTime": 40041,
-            "endTime": 0,
-            "contents": "faf aa fab"
+            "contents": "이제 나오나!"
         }
     ]
 }

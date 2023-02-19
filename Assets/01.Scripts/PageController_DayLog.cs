@@ -61,12 +61,20 @@ public class PageController_DayLog : MonoBehaviour
     [ContextMenu("SaveSchedules")]
     private void SaveSchedules()
     {
-        DataManager.SaveSchedule(_scheduleList.ToArray());
+        if (_scheduleList.Count > 0)
+        {
+            DataManager.SaveSchedule(_scheduleList.ToArray());
+        }
     }
 
     [ContextMenu("LoadSchedules")]
     private void LoadSchedules()
     {
-        _scheduleList.AddSchedules(DataManager.LoadSchedule());
+        DataManager.Schedule[] schedules = DataManager.LoadSchedule();
+
+        if (schedules != null)
+        {
+            _scheduleList.AddSchedules(schedules);
+        }
     }
 }

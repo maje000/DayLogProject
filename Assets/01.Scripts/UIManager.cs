@@ -6,17 +6,59 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public enum PopupType
+    { 
+        AddTodo = 0,
+        END,
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    public Transform _popupHolder;
 
+    static UIManager _instance;
+    UIManager Instance
+    {
+        get => _instance;
     }
+
+    public GameObject Popup_AddTodo;
+
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+    }
+
+    private void Reset()
+    {
+        _popupHolder = transform.Find("Popup");
+    }
+
+    //public void OpenPopup(PopupType popupType)
+    //{
+    //    switch (popupType)
+    //    {
+    //        case PopupType.AddTodo:
+    //            Popup_AddTodo?.SetActive(true);
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
+
+    //public void ClosePopup(PopupType popupType)
+    //{
+    //    switch (popupType)
+    //    {
+    //        case PopupType.AddTodo:
+    //            Popup_AddTodo?.SetActive(false);
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 }
 
 static public class UIExtention

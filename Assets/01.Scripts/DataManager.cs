@@ -39,40 +39,33 @@ public class DataManager
 
     static public void SaveSchedule(Schedule[] schedules)
     {
+        if (schedules == null)
+            return;
+
         ScheduleArray scheduleArray = new ScheduleArray();
         scheduleArray.schedules = schedules;
 
         string saveData = JsonUtility.ToJson(scheduleArray, true);
-
-        string path = Path.Combine(Application.streamingAssetsPath, "SaveData.txt");
+        
+        string path = Path.Combine(Application.persistentDataPath, "ScheduleData.txt");
         File.WriteAllText(path, saveData);
     }
 
     static public Schedule[] LoadSchedule()
     {
-        string path = Path.Combine(Application.streamingAssetsPath, "SaveData.txt");
-        string loadData = File.ReadAllText(path);
-
-        ScheduleArray schedules = JsonUtility.FromJson<ScheduleArray>(loadData);
-
-        return schedules.schedules;
-    }
-
-    static public Schedule GetSchedule(int id, Schedule[] schedules)
-    {
-        int scheduleCount = schedules.Length;
-
-        for(int i = 0; i < scheduleCount; i++)
+        string path = Path.Combine(Application.persistentDataPath, "ScheduleData.txt");
+        if (File.Exists(path))
         {
-            if (schedules[i]
-                
-                .id == id)
+            string loadData = File.ReadAllText(path);
+
+            if (!string.IsNullOrEmpty(loadData))
             {
-                return schedules[i];
+                ScheduleArray schedules = JsonUtility.FromJson<ScheduleArray>(loadData);
+                return schedules.schedules;
             }
         }
-
-        return new Schedule();
+        
+        return null;
     }
 
     //=====================================================================================================TodoList
@@ -91,23 +84,34 @@ public class DataManager
 
     static public void SaveTodoList(Todo[] todoList)
     {
+        if (todoList == null)
+            return;
+
         TodoListArray todoListArray = new TodoListArray();
         todoListArray.todoList = todoList;
 
         string saveData = JsonUtility.ToJson(todoListArray, true);
 
-        string path = Path.Combine(Application.streamingAssetsPath, "SaveData_TodoList.txt");
+        string path = Path.Combine(Application.persistentDataPath, "TodoListData.txt");
         File.WriteAllText(path, saveData);
     }
 
     static public Todo[] LoadTodoList()
     {
-        string path = Path.Combine(Application.streamingAssetsPath, "SaveData_TodoList.txt");
-        string loadData = File.ReadAllText(path);
+        string path = Path.Combine(Application.persistentDataPath, "TodoListData.txt");
+        if (File.Exists(path))
+        {
+            string loadData = File.ReadAllText(path);
 
-        TodoListArray todoListArray = JsonUtility.FromJson<TodoListArray>(loadData);
+            if (!string.IsNullOrEmpty(loadData))
+            {
+                TodoListArray todoListArray = JsonUtility.FromJson<TodoListArray>(loadData);
 
-        return todoListArray.todoList;
+                return todoListArray.todoList;
+            }
+        }
+
+        return null;
     }
 }
 
@@ -125,6 +129,11 @@ static class StaticExtention
 
     static public void AddSchedule(this List<DataManager.Schedule> schedules, string contents)
     {
+        if (schedules == null)
+        {
+            schedules = new List<DataManager.Schedule>();
+        }
+
         // Set::Schedule data;
         DataManager.Schedule schedule = new DataManager.Schedule();
 
@@ -136,7 +145,7 @@ static class StaticExtention
         schedule.startTime = now.Hour * 60 * 60 + now.Minute * 60 + now.Second;
         schedule.contents = contents;
 
-        schedules.AddSchedule(schedule);
+        schedules.Add(schedule);
     }
 
     static public void AddSchedules(this List<DataManager.Schedule> schedules, DataManager.Schedule[] newSchedule)
@@ -149,24 +158,29 @@ static class StaticExtention
         schedules.AddRange(newSchedule);
     }
 
-    static public void AddTodo(this List<DataManager.Todo> TodoList, DataManager.Todo newTodo)
+    static public void AddTodo(this List<DataManager.Todo> todoList, DataManager.Todo newTodo)
     {
-        if (TodoList == null)
+        if (todoList == null)
         {
-            TodoList = new List<DataManager.Todo>();
+            todoList = new List<DataManager.Todo>();
         }
 
-        TodoList.Add(newTodo);
+        todoList.Add(newTodo);
     }
 
     static public void AddTodo(this List<DataManager.Todo> todoList, string contents)
     {
+        if (todoList == null)
+        {
+            todoList = new List<DataManager.Todo>();
+        }
+
         DataManager.Todo todo = new DataManager.Todo();
 
         DateTime now = DateTime.Now;
         todo.dayOfWeek = (DataManager.DayOfWeek)now.DayOfWeek;
         todo.contents = contents;
 
-        todoList.AddTodo(todo);
+        todoList.Add(todo);
     }
 }

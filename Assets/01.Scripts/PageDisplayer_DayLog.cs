@@ -18,8 +18,6 @@ public class PageDisplayer_DayLog : MonoBehaviour
     private Button Button_Reset;
     private Button Button_Exit;
 
-
-
     /** API란
      * API는 정의 및 프로토콜 집합을 사용하여 두 소프트웨어 구성 요소가 서로 통신할 수 있게 하는 메커니즘이다.
      * */
@@ -57,8 +55,6 @@ public class PageDisplayer_DayLog : MonoBehaviour
     {
         GameObject schedule = Instantiate(prefab_Schedule, SchduleListHolder);
 
-        ///Button button = schedule.GetComponent<Button>();
-        //button.onClick.AddListener(OpenPopup_ScheduleData());
         schedule.GetComponent<TextMeshProUGUI>().text = content;
     }
 
@@ -99,12 +95,6 @@ public class PageDisplayer_DayLog : MonoBehaviour
 
     public void OnClick_Reset()
     {
-        // 스케쥴 초기화?
-        /*
-         * _pageController에서 데이터를 일단 모두 지워주자
-         * 그리고 출력된 부분들을 초기화
-         */
-
         _pageController.RemoveSchedules();
     }
 
